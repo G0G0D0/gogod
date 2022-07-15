@@ -1,0 +1,309 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:Gogodo/constants/app_constants.dart';
+import 'package:Gogodo/pages/log_reg.dart';
+import 'package:Gogodo/pages/register_page.dart';
+import 'package:Gogodo/pages/splashes_screen.dart';
+import 'package:Gogodo/providers/auth_provider.dart';
+import 'package:Gogodo/providers/authfree_provider.dart';
+import 'package:Gogodo/providers/second_provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'constants/color_constants.dart';
+import 'pages/pages.dart';
+import 'providers/providers.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(prefs: prefs));
+}
+
+class MyApp extends StatelessWidget {
+  final SharedPreferences prefs;
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
+  MyApp({required this.prefs});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>(
+          create: (_) => AuthProvider(
+            firebaseAuth: FirebaseAuth.instance,
+            googleSignIn: GoogleSignIn(),
+            prefs: this.prefs,
+            firebaseFirestore: this.firebaseFirestore,
+          ),
+        ),
+
+        ChangeNotifierProvider<AuthFreeProvider>(
+          create: (_) => AuthFreeProvider(
+            firebaseAuth: FirebaseAuth.instance,
+            googleSignIn: GoogleSignIn(),
+            prefs: this.prefs,
+            firebaseFirestore: this.firebaseFirestore,
+          ),
+        ),
+
+        Provider<SettingProvider>(
+          create: (_) => SettingProvider(
+            prefs: this.prefs,
+            firebaseFirestore: this.firebaseFirestore,
+            firebaseStorage: this.firebaseStorage,
+          ),
+        ),
+        Provider<HomeProvider>(
+          create: (_) => HomeProvider(
+            firebaseFirestore: this.firebaseFirestore,
+          ),
+        ),
+
+        Provider<SecondProvider>(
+          create: (_) => SecondProvider(
+            firebaseFirestore: this.firebaseFirestore,
+          ),
+        ),
+
+        Provider<ChatProvider>(
+          create: (_) => ChatProvider(
+            prefs: this.prefs,
+            firebaseFirestore: this.firebaseFirestore,
+            firebaseStorage: this.firebaseStorage,
+          ),
+        ),
+      ],
+      child: MaterialApp(
+        routes: {
+          // PaymentGate.id : (context) => PaymentGate(),
+          //LoginPage.id : (context) => LoginPage(),
+          //LoginPortal.id : (context)=> LoginPortal(),
+          //RegisterPage.id : (context)=> RegisterPage(),
+          //SplashPage.id : (context)=> SplashPage(),
+          //SplashesPage.id: (context)=> SplashesPage()
+          //Chat.id : (context)=> Chat(),
+          //HomeScreen.id: (context)=> HomeScreen(),
+          //SecondScreen.id: (context)=> SecondScreen(),
+          //Confirm.id: (context)=>Confirm(),
+          // Settings.id: (context)
+          //=> Settings(),
+
+        },
+
+        title: AppConstants.appTitle,
+        theme: ThemeData(
+          primaryColor: ColorConstants.themeColor,
+        ),
+        home: LogReg(),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
+}
+
+
+
+
+//
+// void main() {
+//   runApp(const MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+//
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       theme: ThemeData(
+//         // This is the theme of your application.
+//         //
+//         // Try running your application with "flutter run". You'll see the
+//         // application has a blue toolbar. Then, without quitting the app, try
+//         // changing the primarySwatch below to Colors.green and then invoke
+//         // "hot reload" (press "r" in the console where you ran "flutter run",
+//         // or simply save your changes to "hot reload" in a Flutter IDE).
+//         // Notice that the counter didn't reset back to zero; the application
+//         // is not restarted.
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+//     );
+//   }
+// }
+//
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({Key? key, required this.title}) : super(key: key);
+//
+//   // This widget is the home page of your application. It is stateful, meaning
+//   // that it has a State object (defined below) that contains fields that affect
+//   // how it looks.
+//
+//   // This class is the configuration for the state. It holds the values (in this
+//   // case the title) provided by the parent (in this case the App widget) and
+//   // used by the build method of the State. Fields in a Widget subclass are
+//   // always marked "final".
+//
+//   final String title;
+//
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
+//
+// class _MyHomePageState extends State<MyHomePage> {
+//   int _counter = 0;
+//
+//   void _incrementCounter() {
+//     setState(() {
+//       // This call to setState tells the Flutter framework that something has
+//       // changed in this State, which causes it to rerun the build method below
+//       // so that the display can reflect the updated values. If we changed
+//       // _counter without calling setState(), then the build method would not be
+//       // called again, and so nothing would appear to happen.
+//       _counter++;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // This method is rerun every time setState is called, for instance as done
+//     // by the _incrementCounter method above.
+//     //
+//     // The Flutter framework has been optimized to make rerunning build methods
+//     // fast, so that you can just rebuild anything that needs updating rather
+//     // than having to individually change instances of widgets.
+//     return Scaffold(
+//       appBar: AppBar(
+//         // Here we take the value from the MyHomePage object that was created by
+//         // the App.build method, and use it to set our appbar title.
+//         title: Text(widget.title),
+//       ),
+//       body: Center(
+//         // Center is a layout widget. It takes a single child and positions it
+//         // in the middle of the parent.
+//         child: Column(
+//           // Column is also a layout widget. It takes a list of children and
+//           // arranges them vertically. By default, it sizes itself to fit its
+//           // children horizontally, and tries to be as tall as its parent.
+//           //
+//           // Invoke "debug painting" (press "p" in the console, choose the
+//           // "Toggle Debug Paint" action from the Flutter Inspector in Android
+//           // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+//           // to see the wireframe for each widget.
+//           //
+//           // Column has various properties to control how it sizes itself and
+//           // how it positions its children. Here we use mainAxisAlignment to
+//           // center the children vertically; the main axis here is the vertical
+//           // axis because Columns are vertical (the cross axis would be
+//           // horizontal).
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             const Text(
+//               'You have pushed the button this many times:',
+//             ),
+//             Text(
+//               '$_counter',
+//               style: Theme.of(context).textTheme.headline4,
+//             ),
+//           ],
+//         ),
+//       ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: _incrementCounter,
+//         tooltip: 'Increment',
+//         child: const Icon(Icons.add),
+//       ), // This trailing comma makes auto-formatting nicer for build methods.
+//     );
+//   }
+// }
+
+
+
+
+
+
+
+// import 'package:firebase_core/firebase_core.dart';
+// //import 'package:firebase_database/firebase_database.dart';
+// import 'package:flutter/material.dart';
+// import 'package:Gogodo/Pages/AccountSettingsPage.dart' as S;
+// import 'package:Gogodo/Pages/ChattingPage.dart';
+// import 'package:Gogodo/Pages/ConfirmationPage.dart';
+// import 'package:Gogodo/Pages/ExtraPage.dart';
+// import 'package:Gogodo/Pages/HomePage.dart';
+// import 'package:Gogodo/Pages/LogReg.dart';
+// import 'package:Gogodo/Pages/SecondPage.dart';
+// import 'package:Gogodo/Pages/loginScreen.dart';
+// import 'package:Gogodo/Pages/registerationScreen.dart';
+// import 'package:Gogodo/models/user.dart';
+// import 'Pages/LoginPage.dart';
+// import 'Pages/PaymentGate.dart';
+// import 'Pages/loginScreen.dart';
+// import 'Pages/registerationScreen.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'Models/user.dart';
+// import 'Pages/ConfirmationPage.dart';
+// import 'Pages/ExtraPage.dart';
+// import 'Models/user.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
+//
+//
+//
+//
+// void main() async
+// {
+//
+//   WidgetsFlutterBinding.ensureInitialized();
+//   MobileAds.instance.initialize();
+//
+//   runApp(MyApp());
+// }
+//
+// // DatabaseReference usersRef = FirebaseDatabase.instance.reference().child("freelancer");
+//
+// class MyApp extends StatelessWidget {
+//   //User get eachUser => null;
+//
+//   // final User eachUser;
+//   // MyApp(this.eachUser);
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//
+//       routes: {
+//         PaymentGate.id : (context) => PaymentGate(),
+//         LoginScreen.id : (context) => LoginScreen(),
+//         //LoginPortal.id : (context)=> LoginPortal(),
+//         RegisterPortal.id : (context)=> RegisterPortal(),
+//         Chat.id : (context)=> Chat(),
+//         HomeScreen.id: (context)=> HomeScreen(),
+//         SecondScreen.id: (context)=> SecondScreen(),
+//         Confirm.id: (context)=>Confirm(),
+//         LogReg.id: (context)=>LogReg(),
+//         Extra.id : (context)=> Extra(),
+//         // Settings.id: (context)
+//         // => Settings(),
+//
+//       },
+//       title: 'Telegram Clone',
+//       theme: ThemeData(
+//         primaryColor: Colors.lightBlueAccent,
+//       ),
+//       home: LogReg(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }
