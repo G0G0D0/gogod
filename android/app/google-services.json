@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "307706959877",
+    "project_id": "gogodo-e708d",
+    "storage_bucket": "gogodo-e708d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307706959877:android:89e31b4d5c157099bba46c",
+        "android_client_info": {
+          "package_name": "com.gaya.gogodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307706959877-4edfr4pmrbjstmrfn3vcqqdmbdmdooja.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gaya.gogodo",
+            "certificate_hash": "361d31500c2c5802f3bb3bbd2c4088eae7da07ee"
+          }
+        },
+        {
+          "client_id": "307706959877-n0iqq731sbrfh8l454123f3vgdedcajf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7kyqfApmuStt9MNW5rxS4jV30a0MC5GM"
+        }
+      ],
+      "services": {
+        "admob_app_id": "ca-app-pub-1836626178823657~3781298539",
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307706959877-n0iqq731sbrfh8l454123f3vgdedcajf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
